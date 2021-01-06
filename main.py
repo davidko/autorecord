@@ -57,7 +57,7 @@ parser.add_argument(
 args = parser.parse_args(remaining)
 
 q = queue.Queue()
-prebuf = collections.deque(maxlen=100)
+prebuf = collections.deque(maxlen=50)
 
 ENERGY_THRESH = 1.0
 
@@ -96,7 +96,6 @@ def callback(indata, frames, time, status):
 
     if state is IDLE:
         if energy > ENERGY_THRESH:
-            print(count)
             if count > COUNT_THRESH:
                 # Begin recording
                 # Prepend the prebuf
@@ -128,6 +127,7 @@ def callback(indata, frames, time, status):
         if energy < ENERGY_THRESH:
             if count > COUNT_THRESH:
                 # We are done recording this block. Close the file
+                print('Done recording file!')
                 file_lock.acquire()
                 file.close()
                 file = None
